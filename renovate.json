@@ -1,6 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "local>retailnext/renovate-config:dependencies-cloud",
+    "local>retailnext/renovate-config:dependencies-smartops",
+    ":automergeAll"
   ]
 }
