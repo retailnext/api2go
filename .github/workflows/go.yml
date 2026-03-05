@@ -7,23 +7,27 @@ on:
     branches:
       - master
 
+permissions: {}
+
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
         with:
-          go-version: '1.23'
+          go-version: '1.24'
 
       - name: Install dependencies
         run: |
           go mod download
 
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@55c2c1448f86e01eaae002a5a3a9624417608d84 # v6.5.2
         with:
           args: -v
           skip-cache: false
@@ -31,26 +35,28 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: Go tests
+    permissions:
+      contents: read
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-    - name: Setup Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.23'
+      - name: Setup Go
+        uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
+        with:
+          go-version: '1.24'
 
-    - name: Install dependencies
-      run: |
-        go get -t -d -v ./...
-        go install github.com/bwplotka/bingo@v0.9.0
-        bingo get -l
+      - name: Install dependencies
+        run: |
+          go get -t -d -v ./...
+          go install github.com/bwplotka/bingo@v0.9.0
+          bingo get -l
 
-    - name: Run tests
-      run: |
-        ginkgo -r -cover --randomizeAllSpecs --randomizeSuites --failOnPending --trace --race --progress
-        ginkgo -tags=gorillamux -r --randomizeSuites --failOnPending --trace --race
-        ginkgo -tags=gingonic -r --randomizeSuites --failOnPending --trace --race
-        ginkgo -tags=echo -r --randomizeSuites --failOnPending --trace --race
-        rm examples/examples.coverprofile
-        gover
-        goveralls -coverprofile=gover.coverprofile -repotoken gY90SprlNRGmSMl7MgybLreYa05wUXJTU
+      - name: Run tests
+        run: |
+          ginkgo -r -cover --randomizeAllSpecs --randomizeSuites --failOnPending --trace --race --progress
+          ginkgo -tags=gorillamux -r --randomizeSuites --failOnPending --trace --race
+          ginkgo -tags=gingonic -r --randomizeSuites --failOnPending --trace --race
+          ginkgo -tags=echo -r --randomizeSuites --failOnPending --trace --race
+          rm examples/examples.coverprofile
+          gover
+          goveralls -coverprofile=gover.coverprofile -repotoken ${{ secrets.COVERALLS_REPO_TOKEN }}
