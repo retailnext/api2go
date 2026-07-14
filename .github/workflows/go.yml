@@ -27,7 +27,7 @@ jobs:
           go mod download
 
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@55c2c1448f86e01eaae002a5a3a9624417608d84 # v6.5.2
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
           args: -v
           skip-cache: false
@@ -59,4 +59,9 @@ jobs:
           ginkgo -tags=echo -r --randomizeSuites --failOnPending --trace --race
           rm examples/examples.coverprofile
           gover
-          goveralls -coverprofile=gover.coverprofile -repotoken ${{ secrets.COVERALLS_REPO_TOKEN }}
+
+      - name: Upload coverage to Coveralls
+        env:
+          COVERALLS_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        if: env.COVERALLS_TOKEN != ''
+        run: goveralls -coverprofile=gover.coverprofile 
