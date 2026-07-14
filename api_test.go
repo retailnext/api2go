@@ -1486,7 +1486,7 @@ var _ = Describe("RestHandler", func() {
 	Context("Custom context", func() {
 		var (
 			api                 *API
-			customContextCalled bool = false
+			customContextCalled bool = false //nolint:staticcheck // explicit type kept for clarity
 			rec                 *httptest.ResponseRecorder
 			source              *fixtureSource
 		)

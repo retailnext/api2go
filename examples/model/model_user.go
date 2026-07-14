@@ -15,7 +15,6 @@ type User struct {
 	PasswordHash  string       `json:"-"`
 	Chocolates    []*Chocolate `json:"-"`
 	ChocolatesIDs []string     `json:"-"`
-	exists        bool
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
