@@ -1,0 +1,16 @@
+version: "2"
+
+linters:
+  settings:
+    govet:
+      disable:
+        # Flags reflect.Ptr and other deprecated stdlib aliases for inlining;
+        # keeping the aliases avoids churn in the library code.
+        - inline
+  exclusions:
+    rules:
+      # The error strings are capitalized throughout and consumers
+      # may match on their text, so leave them as-is.
+      - linters:
+          - staticcheck
+        text: "ST1005"

@@ -1105,7 +1105,7 @@ func (res *resource) respondWithPagination(obj Responder, info information, stat
 }
 
 func unmarshalRequest(r *http.Request) ([]byte, error) {
-	defer r.Body.Close()
+	defer r.Body.Close() //nolint:errcheck // nothing to do about a failed close on a request body
 	data, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, err

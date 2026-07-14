@@ -56,6 +56,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -78,8 +79,8 @@ func main() {
 	handler := api.Handler().(*httprouter.Router)
 	// It is also possible to get the instance of julienschmidt/httprouter and add more custom routes!
 	handler.GET("/hello-world", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		fmt.Fprint(w, "Hello World!\n")
+		_, _ = fmt.Fprint(w, "Hello World!\n")
 	})
 
-	http.ListenAndServe(fmt.Sprintf(":%d", port), handler)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), handler))
 }
